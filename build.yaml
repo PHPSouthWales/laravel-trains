@@ -1,0 +1,44 @@
+name: php-south-wales-laravel-trains
+language: php
+type: laravel
+
+dockerfile:
+  stages:
+    build:
+      extends: base
+      packages:
+        - git
+        - libpng-dev
+        - libzip-dev
+        - unzip
+      extensions:
+        install:
+          - gd
+          - zip
+      root_commands: []
+      commands:
+        - composer validate --strict
+        - composer install
+      extra_directories:
+        - app
+        - bootstrap
+        - config
+        - routes
+      extra_files:
+        - artisan
+
+drupal:
+  docroot: public
+
+docker-compose:
+  services:
+    php:
+      build:
+        target: build
+    web: true
+
+web:
+  type: nginx
+
+php:
+  version: 8.1-fpm-bullseye
